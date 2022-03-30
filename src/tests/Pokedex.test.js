@@ -41,12 +41,13 @@ describe(
       );
       const button = screen.getByRole('button', { name: /Próximo pokémon/i });
       expect(button).toBeDefined();
-      const pokeName = screen.getByTestId(pokeNameTestId);
+      const nameOnScreen = screen.getByTestId(pokeNameTestId);
 
       pokemons.forEach((pokemon) => {
-        expect(pokeName).toHaveTextContent(pokemon.name);
+        expect(nameOnScreen).toHaveTextContent(pokemon.name);
         userEvent.click(button);
       });
+      expect(nameOnScreen).toHaveTextContent(pokemons[0].name);
     });
 
     it('testa se é exibido apenas 1 pokémon', () => {
@@ -56,8 +57,8 @@ describe(
           isPokemonFavoriteById={ isPokemonFavoriteByIdMock }
         />,
       );
-      const visiblePokemon = screen.getAllByTestId(pokeNameTestId);
-      expect(visiblePokemon).toHaveLength(1);
+      const nameOnScreen = screen.getAllByTestId(pokeNameTestId);
+      expect(nameOnScreen).toHaveLength(1);
     });
 
     it('testa se existe um botão para cada tipo e o botão All é sempre visível', () => {
@@ -96,14 +97,15 @@ describe(
 
         const currType = button.innerHTML;
         const pokemonOfThisType = pokemons.filter((pokemon) => pokemon.type === currType);
-        const visiblePokemonType = screen.getByTestId('pokemon-type');
+        const typeOnScreen = screen.getByTestId('pokemon-type');
 
-        expect(visiblePokemonType).toHaveTextContent(currType);
+        expect(typeOnScreen).toHaveTextContent(currType);
 
         pokemonOfThisType.forEach(() => {
-          expect(visiblePokemonType).toHaveTextContent(currType);
+          expect(typeOnScreen).toHaveTextContent(currType);
           userEvent.click(nextButton);
         });
+        expect(typeOnScreen).toHaveTextContent(pokemonOfThisType[0].type);
 
         // if (pokemonOfThisType.length > 1) {
         //   for (let ind = 0; ind < pokemonOfThisType.length; ind += 1);
@@ -122,14 +124,16 @@ describe(
       );
       const allButton = screen.getByRole('button', { name: /All/i });
       const nextButton = screen.getByRole('button', { name: /Próximo pokémon/i });
-      const visiblePokemon = screen.getByTestId(pokeNameTestId);
+      const nameOnScreen = screen.getByTestId(pokeNameTestId);
 
       expect(allButton).toBeDefined();
       userEvent.click(allButton);
+
       pokemons.forEach((pokemon) => {
-        expect(visiblePokemon).toHaveTextContent(pokemon.name);
+        expect(nameOnScreen).toHaveTextContent(pokemon.name);
         userEvent.click(nextButton);
       });
+      expect(nameOnScreen).toHaveTextContent(pokemons[0].name);
     });
   },
 );
